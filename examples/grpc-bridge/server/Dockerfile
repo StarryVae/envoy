@@ -1,4 +1,4 @@
-FROM golang:1.19.2-bullseye@sha256:01b565b5e745c650b1893c9a1ba6d3966e5ae4a72ec96595c5a7c54e04d96c05 as builder
+FROM golang:1.19.5-bullseye@sha256:ceeecad08787b0efc79e10355b15411455e037f29fd0f988283ca71b6b19d014 as builder
 
 WORKDIR /build
 
