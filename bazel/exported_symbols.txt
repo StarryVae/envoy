@@ -1,4 +1,5 @@
 {
 	lua*;
 	envoyGoFilterHttp*;
+	envoy_http_lua_ffi*;
 };

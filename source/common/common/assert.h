@@ -306,7 +306,7 @@ void resetEnvoyBugCountersForTest();
 
 // Envoy has a number of switch statements which panic if there's no legal value set.
 // This is not encouraged, as it's too easy to panic using break; instead of return;
-// but this macro replaces a less clear crash using NOT_REACHED_GCOVR_EXCL_LINE.
+// but this macro replaces a less clear crash using PANIC_DUE_TO_CORRUPT_ENUM.
 #define PANIC_DUE_TO_CORRUPT_ENUM PANIC("corrupted enum");
 
 } // namespace Assert

@@ -56,5 +56,5 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: web_service
-                port_value: 9000
+                address: 172.17.0.6
+                port_value: 80
