@@ -19,12 +19,32 @@ static_resources:
               - "*"
               routes:
               - match:
-                  prefix: "/"
+                  prefix: "/route1"
                 route:
                   cluster: web_service
-
+                typed_per_filter_config:
+                  test-wasm1:
+                    "@type": type.googleapis.com/envoy.extensions.filters.http.wasm.v3.RoutePluginConfig
+                    configuration:
+                      "@type": "type.googleapis.com/google.protobuf.StringValue"
+                      value: |
+                        {
+                          "test-wasm1": "test"
+                        }
+                  test-wasm2:
+                    "@type": type.googleapis.com/envoy.extensions.filters.http.wasm.v3.RoutePluginConfig
+                    configuration:
+                      "@type": "type.googleapis.com/google.protobuf.StringValue"
+                      value: |
+                        {
+                          "test-wasm2": "test"
+                        }
+              - match:
+                  prefix: "/route2"
+                route:
+                  cluster: web_service
           http_filters:
-          - name: envoy.filters.http.wasm
+          - name: test-wasm1
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm
               config:
@@ -38,6 +58,23 @@ static_resources:
                     {}
                 vm_config:
                   vm_id: "my_vm_id"
+                  code:
+                    local:
+                      filename: "lib/envoy_filter_http_wasm_example.wasm"
+          - name: test-wasm2
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm
+              config:
+                name: "my_plugin"
+                root_id: "my_root_id"
+                # if your wasm filter requires custom configuration you can add
+                # as follows
+                configuration:
+                  "@type": "type.googleapis.com/google.protobuf.StringValue"
+                  value: |
+                    {}
+                vm_config:
+                  vm_id: "my_vm_id1"
                   code:
                     local:
                       filename: "lib/envoy_filter_http_wasm_example.wasm"

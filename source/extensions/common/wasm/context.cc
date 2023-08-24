@@ -844,6 +844,9 @@ BufferInterface* Context::getBuffer(WasmBufferType type) {
   case WasmBufferType::VmConfiguration:
     return buffer_.set(wasm()->vm_configuration());
   case WasmBufferType::PluginConfiguration:
+    if (route_config_) {
+      return buffer_.set(route_config_->routePluginConfiguration());
+    }
     if (temp_plugin_) {
       return buffer_.set(temp_plugin_->plugin_configuration_);
     }
@@ -1656,6 +1659,8 @@ WasmResult Context::sendLocalResponse(uint32_t response_code, std::string_view b
 }
 
 Http::FilterHeadersStatus Context::decodeHeaders(Http::RequestHeaderMap& headers, bool end_stream) {
+  route_config_ =
+      Http::Utility::resolveMostSpecificPerFilterConfig<RouteConfig>(decoder_callbacks_);
   onCreate();
   request_headers_ = &headers;
   end_of_stream_ = end_stream;

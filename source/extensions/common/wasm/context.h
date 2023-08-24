@@ -17,6 +17,8 @@
 #include "source/extensions/filters/common/expr/cel_state.h"
 #include "source/extensions/filters/common/expr/evaluator.h"
 
+#include "envoy/extensions/filters/http/wasm/v3/wasm.pb.h"
+
 #include "eval/public/activation.h"
 #include "include/proxy-wasm/wasm.h"
 
@@ -100,6 +102,19 @@ private:
   const ::Envoy::Buffer::Instance* const_buffer_instance_{};
   ::Envoy::Buffer::Instance* buffer_instance_{};
 };
+
+class RouteConfig : public Router::RouteSpecificFilterConfig {
+public:
+  RouteConfig(const envoy::extensions::filters::http::wasm::v3::RoutePluginConfig& proto_config)
+      : route_plugin_configuration_(MessageUtil::anyToBytes(proto_config.configuration())) {}
+
+  const std::string& routePluginConfiguration() const { return route_plugin_configuration_; }
+
+private:
+  const std::string route_plugin_configuration_;
+};
+
+using RouteConfigSharedPtr = std::shared_ptr<RouteConfig>;
 
 // A context which will be the target of callbacks for a particular session
 // e.g. a handler of a stream.
@@ -451,6 +466,9 @@ protected:
   // Filter state prototype declaration.
   absl::flat_hash_map<std::string, Filters::Common::Expr::CelStatePrototypeConstPtr>
       state_prototypes_;
+
+private:
+  const RouteConfig* route_config_{nullptr};
 };
 using ContextSharedPtr = std::shared_ptr<Context>;
 

@@ -29,6 +29,13 @@ Http::FilterFactoryCb WasmFilterConfig::createFilterFactoryFromProtoTyped(
   };
 }
 
+Router::RouteSpecificFilterConfigConstSharedPtr
+WasmFilterConfig::createRouteSpecificFilterConfigTyped(
+    const envoy::extensions::filters::http::wasm::v3::RoutePluginConfig& proto_config,
+    Server::Configuration::ServerFactoryContext&, ProtobufMessage::ValidationVisitor&) {
+  return std::make_shared<RouteConfig>(proto_config);
+}
+
 /**
  * Static registration for the Wasm filter. @see RegisterFactory.
  */

@@ -48,6 +48,8 @@ void ExampleContext::onCreate() { LOG_WARN(std::string("onCreate " + std::to_str
 
 FilterHeadersStatus ExampleContext::onRequestHeaders(uint32_t, bool) {
   LOG_DEBUG(std::string("onRequestHeaders ") + std::to_string(id()));
+  auto config = getBufferBytes(WasmBufferType::PluginConfiguration, 0, 1000);
+  LOG_INFO(std::string("config: ") + std::string(config->view()));
   auto result = getRequestHeaderPairs();
   auto pairs = result->pairs();
   LOG_INFO(std::string("headers: ") + std::to_string(pairs.size()));

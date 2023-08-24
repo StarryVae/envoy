@@ -20,6 +20,7 @@ using Envoy::Extensions::Common::Wasm::PluginHandleSharedPtr;
 using Envoy::Extensions::Common::Wasm::PluginHandleSharedPtrThreadLocal;
 using Envoy::Extensions::Common::Wasm::PluginSharedPtr;
 using Envoy::Extensions::Common::Wasm::Wasm;
+using Envoy::Extensions::Common::Wasm::RouteConfig;
 
 class FilterConfig : Logger::Loggable<Logger::Id::wasm> {
 public:
