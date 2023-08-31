@@ -17,7 +17,17 @@ static_resources:
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.filters.http.golang.v3alpha.Config
               library_id: simple
-              library_path: "lib/simple.so"
+              library_path: "simple/simple.so"
+              plugin_name: simple
+              plugin_config:
+                "@type": type.googleapis.com/xds.type.v3.TypedStruct
+                value:
+                  prefix_localreply_body: "Configured local reply from go"
+          - name: envoy.filters.http.golang
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.golang.v3alpha.Config
+              library_id: simple
+              library_path: "simple/simple2.so"
               plugin_name: simple
               plugin_config:
                 "@type": type.googleapis.com/xds.type.v3.TypedStruct
@@ -36,6 +46,20 @@ static_resources:
                   prefix: "/"
                 route:
                   cluster: helloworld_service_cluster
+                typed_per_filter_config:
+                  envoy.filters.http.golang:
+                    "@type": type.googleapis.com/envoy.extensions.filters.http.golang.v3alpha.ConfigsPerRoute
+                    plugins_config:
+                      simple:
+                        config:
+                          "@type": type.googleapis.com/xds.type.v3.TypedStruct
+                          value:
+                            prefix_localreply_body: "Configured local reply from go"
+                      simple:
+                        config:
+                          "@type": type.googleapis.com/xds.type.v3.TypedStruct
+                          value:
+                            prefix_localreply_body: "Configured local reply from C++"
   clusters:
   - name: helloworld_service_cluster
     type: STRICT_DNS
